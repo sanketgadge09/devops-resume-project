@@ -13,7 +13,7 @@ provider "aws" {
 
 # 1. Create S3 Bucket
 resource "aws_s3_bucket" "website_bucket" {
-  bucket = "sanket-devops-resume-bucket-2026"
+  bucket = "sanket-devops-resume-v2-2026"  # Updated name
   force_destroy = true
 }
 
