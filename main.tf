@@ -50,6 +50,10 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
 # 4. Apply S3 Bucket Policy to allow public reading of index.html
 resource "aws_s3_bucket_policy" "allow_public_access" {
   bucket = aws_s3_bucket.website_bucket.id
+
+  # THIS LINE TELLS TERRAFORM TO WAIT FOR THE UNBLOCK TO FINISH FIRST
+  depends_on = [aws_s3_bucket_public_access_block.public_access]
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
