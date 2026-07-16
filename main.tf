@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 
@@ -11,13 +15,20 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# 1. Create S3 Bucket
+# Generate a random 6-character suffix (lowercase letters & numbers only)
+resource "random_string" "suffix" {
+  length  = 6
+  special = false
+  upper   = false
+}
+
+# 1. Create S3 Bucket with a guaranteed unique name
 resource "aws_s3_bucket" "website_bucket" {
-  bucket = "sanket-devops-resume-v2-2026"  # Updated name
+  bucket        = "sanket-devops-resume-${random_string.suffix.result}"
   force_destroy = true
 }
 
-# 2. Configure public access settings (The correct singular 'block_public_policy')
+# 2. Configure public access settings
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.website_bucket.id
 
